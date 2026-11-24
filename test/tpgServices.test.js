@@ -23,6 +23,25 @@ const sentEncryptedBody = () => fakeSsg.lastBody({ encrypted: true });
 beforeEach(() => fakeSsg.reset());
 
 describe('Courses and course runs', () => {
+  test('searchCourses sends the keyword and paging, version v3.0', async () => {
+    await course.searchCourses('MindForce', { page: 0, pageSize: 20 });
+    assert.equal(sent().method, 'GET');
+    assert.equal(sent().url, '/courses/directory');
+    assert.equal(sent().headers['x-api-version'], 'v3.0');
+    assert.deepEqual(sent().query, { page: 0, pageSize: 20, keyword: 'MindForce' });
+  });
+
+  test('searchCourses turns SSG\'s "404 Not Found" (no match) into an empty list', async () => {
+    fakeSsg.replyWith({ status: 404, body: '{"data":{},"error":{"code":404,"message":"Not Found"},"status":400}' });
+    const result = await course.searchCourses('NoSuchCourse');
+    assert.deepEqual(result, { status: 200, data: { courses: [] }, meta: { total: 0 }, error: {} });
+  });
+
+  test('searchCourses still fails on other SSG errors', async () => {
+    fakeSsg.replyWith({ status: 400, body: '{"error":{"code":400,"message":"Bad Request"}}' });
+    await assert.rejects(course.searchCourses('x'), (error) => error.status === 400);
+  });
+
   test('getCourseDetails', async () => {
     await course.getCourseDetails('TGS-001');
     assert.equal(sent().method, 'GET');

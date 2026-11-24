@@ -16,6 +16,7 @@ const sfcClaim = require('../controllers/sfcClaimController');
 const router = express.Router();
 
 // ---- Courses
+router.get('/courses', course.searchCourses);
 router.get('/courses/:courseReferenceNumber', course.getCourseDetails);
 router.get('/courses/:courseReferenceNumber/runs', course.getCourseRunsByCourse);
 

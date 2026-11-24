@@ -1,9 +1,28 @@
 /**
  * Courses, course runs and sessions.
  */
-const { callSsg } = require('../ssgClient');
+const { callSsg, SsgApiError } = require('../ssgClient');
 const TPG = require('../../config/tpgEndpoints');
 const { trainingPartner } = require('../../config/env');
+
+/**
+ * Searches all courses on MySkillsFuture by keyword (a word from the title, or the provider's name).
+ * Use it to find a course's reference number (e.g. "TGS-2020505817").
+ *
+ * SSG ignores a UEN filter here, so search by your company name to find your own courses.
+ * Optional query: page, pageSize.
+ */
+async function searchCourses(keyword, query = {}) {
+  try {
+    return await callSsg(TPG.searchCourses, { query: { ...query, keyword } });
+  } catch (error) {
+    // SSG answers "404 Not Found" when nothing matches. For a search, that is simply no results.
+    if (error instanceof SsgApiError && error.status === 404 && error.endpointName === 'searchCourses') {
+      return { status: 200, data: { courses: [] }, meta: { total: 0 }, error: {} };
+    }
+    throw error;
+  }
+}
 
 /** Details of one course on MySkillsFuture. */
 function getCourseDetails(courseReferenceNumber, query = {}) {
@@ -75,6 +94,7 @@ function withTrainingProvider(body = {}) {
 }
 
 module.exports = {
+  searchCourses,
   getCourseDetails,
   publishCourseRun,
   updateCourseRun,

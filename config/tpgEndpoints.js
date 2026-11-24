@@ -17,6 +17,12 @@
 
 const TPG_ENDPOINTS = {
   // ---------------------------------------------------------------- Courses
+  searchCourses: {
+    method: 'GET',
+    path: '/courses/directory',
+    version: ['SSG_COURSE_SEARCH_VERSION', 'v3.0'], // portal: "Retrieve Courses", Active (v2.2, v3.0). Checked on production 2026-11-24
+    encrypted: false,
+  },
   getCourseDetails: {
     method: 'GET',
     path: '/courses/directory/:courseReferenceNumber',

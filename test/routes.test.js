@@ -86,6 +86,47 @@ describe('Response format', () => {
     });
   });
 
+  test('course search with summary=true returns only the fields needed to pick a course', async () => {
+    fakeSsg.replyWith({
+      status: 200,
+      body: JSON.stringify({
+        status: 200,
+        data: {
+          courses: [{
+            referenceNumber: 'TGS-2020505817',
+            title: 'Classroom Management (WSQ)',
+            trainingProviderAlias: 'MINDFORCE ACADEMY PTE. LIMITED',
+            totalCostOfTrainingPerTrainee: 1000,
+            totalTrainingDurationHour: 16,
+            description: 'long text that summary leaves out',
+          }],
+        },
+        meta: { total: 11 },
+      }),
+    });
+
+    const res = await call('GET', '/api/ssg/courses?keyword=MindForce&summary=true');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body.data, {
+      total: 11,
+      courses: [{
+        referenceNumber: 'TGS-2020505817',
+        title: 'Classroom Management (WSQ)',
+        trainingProvider: 'MINDFORCE ACADEMY PTE. LIMITED',
+        totalCostOfTrainingPerTrainee: 1000,
+        totalTrainingDurationHour: 16,
+      }],
+    });
+    assert.equal(fakeSsg.lastRequest().query.summary, undefined, 'summary is ours, not sent to SSG');
+  });
+
+  test('course search with no match returns an empty list, not 404', async () => {
+    fakeSsg.replyWith({ status: 404, body: '{"error":{"code":404,"message":"Not Found"}}' });
+    const res = await call('GET', '/api/ssg/courses?keyword=NoSuchCourse&summary=true');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body.data, { total: 0, courses: [] });
+  });
+
   test('an SSG timeout returns 504', async () => {
     fakeSsg.replyWith({ networkError: 'ECONNABORTED' });
     const res = await call('GET', '/api/ssg/course-runs/123');
@@ -95,6 +136,7 @@ describe('Response format', () => {
 
 describe('Required fields are checked before calling SSG', () => {
   const cases = [
+    ['GET', '/api/ssg/courses', undefined, 'keyword'],
     ['POST', '/api/ssg/course-runs', {}, 'course.courseReferenceNumber'],
     ['PUT', '/api/ssg/course-runs/123', {}, 'course.courseReferenceNumber'],
     ['DELETE', '/api/ssg/course-runs/123', undefined, 'courseReferenceNumber'],
@@ -125,6 +167,7 @@ describe('Required fields are checked before calling SSG', () => {
 
 describe('Each route reaches the right SSG API', () => {
   const cases = [
+    ['GET', '/api/ssg/courses?keyword=safety', undefined, 'GET', '/courses/directory'],
     ['GET', '/api/ssg/courses/TGS-1', undefined, 'GET', '/courses/directory/TGS-1'],
     ['GET', '/api/ssg/courses/TGS-1/runs', undefined, 'GET', '/courses/courseRuns/reference'],
     ['POST', '/api/ssg/course-runs', { course: { courseReferenceNumber: 'TGS-1' } }, 'POST', '/courses/courseRuns/publish'],

@@ -160,6 +160,216 @@
       "name": "Courses",
       "item": [
         {
+          "name": "Search courses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "pm.test('Courses list is returned', () => {",
+                  "    const courses = body.data?.courses ?? body.data?.data?.courses;",
+                  "    pm.expect(courses).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "courses"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "MindForce",
+                  "description": "Required. A word from the course title, or your company name to list your own courses"
+                },
+                {
+                  "key": "summary",
+                  "value": "true",
+                  "description": "Optional. true = only reference number, title, provider, fee and hours"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+          },
+          "response": [
+            {
+              "name": "200 OK (production, summary=true)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyword",
+                      "value": "MindForce",
+                      "description": "Required. A word from the course title, or your company name to list your own courses"
+                    },
+                    {
+                      "key": "summary",
+                      "value": "true",
+                      "description": "Optional. true = only reference number, title, provider, fee and hours"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ]
+                },
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"total\": 11,\n    \"courses\": [\n      {\n        \"referenceNumber\": \"TGS-2020505817\",\n        \"title\": \"Classroom Management (WSQ) (Classroom & Asynchronous)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      },\n      {\n        \"referenceNumber\": \"TGS-2020504078\",\n        \"title\": \"Early Intervention: Fundamentals and Principles (WSQ)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      },\n      {\n        \"referenceNumber\": \"TGS-2020505813\",\n        \"title\": \"Family and Caregiver Engagement (WSQ) (Classroom & Asynchronous)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "200 No match (empty list)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyword",
+                      "value": "MindForce",
+                      "description": "Required. A word from the course title, or your company name to list your own courses"
+                    },
+                    {
+                      "key": "summary",
+                      "value": "true",
+                      "description": "Optional. true = only reference number, title, provider, fee and hours"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ]
+                },
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"total\": 0,\n    \"courses\": []\n  }\n}"
+            },
+            {
+              "name": "400 Missing keyword",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyword",
+                      "value": "MindForce",
+                      "description": "Required. A word from the course title, or your company name to list your own courses"
+                    },
+                    {
+                      "key": "summary",
+                      "value": "true",
+                      "description": "Optional. true = only reference number, title, provider, fee and hours"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ]
+                },
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): keyword\",\n  \"ssgResponse\": null\n}"
+            }
+          ]
+        },
+        {
           "name": "Get course details",
           "request": {
             "method": "GET",
@@ -1035,7 +1245,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"courseRun\": {\n        \"id\": 14111,\n        \"title\": \"Certificate of Competency in Earth Control Measures\",\n        \"referenceNumber\": \"XX-S1234567A-01-TEST 166\",\n        \"externalReferenceNumber\": \"TEST 166\",\n        \"modeOfTraining\": \"1\",\n        \"courseDates\": {\n          \"start\": 20191101,\n          \"end\": 20191105\n        },\n        \"sessions\": [\n          {\n            \"id\": \"TEST 166-41618-S1\",\n            \"startDate\": \"20190814\",\n            \"endDate\": \"20190814\",\n            \"startTime\": \"15:30\",\n            \"endTime\": \"17:30\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"112A\",\n              \"street\": \"Street ABC\",\n              \"floor\": \"15\",\n              \"unit\": \"001\",\n              \"building\": \"Building ABC\",\n              \"postalCode\": 123455,\n              \"room\": \"24\",\n              \"wheelChairAccess\": true\n            },\n            \"attendance\": [\n              {\n                \"id\": 1394,\n                \"entryMode\": \"Manual\",\n                \"status\": \"Confirmed\",\n                \"nric\": \"S1234567A\",\n                \"editedByTP\": \"No\",\n                \"sentToTraqom\": \"Pending Upload to TRAQOM:\",\n                \"latitude\": \"116.397128\",\n                \"longitude\": \"39.916527\",\n                \"manuallyAdded\": false,\n                \"trainee\": {\n                  \"individualId\": \"5BD398B2-066B-4814-BF64-D1014A8658F2\",\n                  \"accountType\": \"singPass\",\n                  \"name\": \"rosy\",\n                  \"id\": \"SS2312345H\",\n                  \"attendeeType\": \"Trainee\",\n                  \"idType\": {\n                    \"code\": \"SB\",\n                    \"description\": \"Singapore Blue Identification Card\"\n                  },\n                  \"email\": \"abc@test.com\",\n                  \"contactNumber\": {\n                    \"countryCode\": 86,\n                    \"areaCode\": 357,\n                    \"mobile\": \"85858585\"\n                  },\n                  \"surveyLanguage\": {\n                    \"code\": \"EL\",\n                    \"description\": \"English\"\n                  }\n                },\n                \"errorMessage\": null\n              }\n            ]\n          }\n        ]\n      }\n    },\n    \"meta\": {\n      \"total\": 2\n    },\n    \"error\": {}\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"courseRun\": {\n        \"id\": 14111,\n        \"title\": \"Certificate of Competency in Earth Control Measures\",\n        \"referenceNumber\": \"XX-S1234567A-01-TEST 166\",\n        \"externalReferenceNumber\": \"TEST 166\",\n        \"modeOfTraining\": \"1\",\n        \"courseDates\": {\n          \"start\": 20191101,\n          \"end\": 20191105\n        },\n        \"sessions\": [\n          {\n            \"id\": \"TEST 166-41618-S1\",\n            \"startDate\": \"20190814\",\n            \"endDate\": \"20190814\",\n            \"startTime\": \"15:30\",\n            \"endTime\": \"17:30\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"112A\",\n              \"street\": \"Street ABC\",\n              \"floor\": \"15\",\n              \"unit\": \"001\",\n              \"building\": \"Building ABC\",\n              \"postalCode\": 123455,\n              \"room\": \"24\",\n              \"wheelChairAccess\": true\n            },\n            \"attendance\": [\n              {\n                \"id\": 1394,\n                \"entryMode\": \"Manual\",\n                \"status\": \"Confirmed\",\n                \"nric\": \"S1234567A\",\n                \"editedByTP\": \"No\",\n                \"sentToTraqom\": \"Pending Upload to TRAQOM:\",\n                \"latitude\": \"116.397128\",\n                \"longitude\": \"39.916527\",\n                \"manuallyAdded\": false,\n                \"trainee\": {\n                  \"individualId\": \"5BD398B2-066B-4814-BF64-D1014A8658F2\",\n                  \"accountType\": \"singPass\",\n                  \"name\": \"rosy\",\n                  \"id\": \"S1234567A\",\n                  \"attendeeType\": \"Trainee\",\n                  \"idType\": {\n                    \"code\": \"SB\",\n                    \"description\": \"Singapore Blue Identification Card\"\n                  },\n                  \"email\": \"abc@test.com\",\n                  \"contactNumber\": {\n                    \"countryCode\": 86,\n                    \"areaCode\": 357,\n                    \"mobile\": \"85858585\"\n                  },\n                  \"surveyLanguage\": {\n                    \"code\": \"EL\",\n                    \"description\": \"English\"\n                  }\n                },\n                \"errorMessage\": null\n              }\n            ]\n          }\n        ]\n      }\n    },\n    \"meta\": {\n      \"total\": 2\n    },\n    \"error\": {}\n  }\n}"
             },
             {
               "name": "400 Missing query parameters",

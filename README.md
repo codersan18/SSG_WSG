@@ -46,6 +46,7 @@ Errors are `{ "success": false, "message", "api", "ssgResponse" }`, using SSG's 
 ### Courses
 | Route | SSG API | Encrypted |
 |---|---|---|
+| `GET /courses?keyword=&summary=true` | `GET /courses/directory` (v3.0). Finds a course reference number; search your company name to list your own courses | No |
 | `GET /courses/:courseReferenceNumber` | `GET /courses/directory/{ref}` | No |
 | `GET /courses/:courseReferenceNumber/runs` | `GET /courses/courseRuns/reference` | No |
 
