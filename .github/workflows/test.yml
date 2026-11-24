@@ -36,8 +36,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # package-lock.json is currently in .gitignore. If you commit it, the faster and
-      # reproducible "npm ci" is used automatically.
+      # package-lock.json is committed, so "npm ci" installs the exact locked versions.
+      # The "npm install" fallback only runs if the lock file is ever removed.
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then
