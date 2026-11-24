@@ -1,0 +1,22 @@
+{
+  "name": "ssg_wsg",
+  "version": "1.0.0",
+  "description": "SSG PRODUCTION",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "check": "node scripts/checkConnection.js",
+    "test": "node --test test/ssgCrypto.test.js test/ssgClient.test.js test/tpgServices.test.js test/routes.test.js test/env.test.js"
+  },
+  "author": "San",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

@@ -1,0 +1,3745 @@
+{
+  "info": {
+    "name": "SSG TPG Gateway",
+    "description": "Every route of the SSG TPG Gateway (this project). Requests go to the gateway, which handles the SSG certificate, `x-api-version` headers and payload encryption.\n\nSetup:\n1. Start the gateway: `npm start`\n2. Set the collection variables `baseUrl` and `apiKey` (the GATEWAY_API_KEY from .env).\n3. Fill in the ID variables (runId, enrolmentReferenceNumber, ...) as you get them from SSG responses.\n\nRequests marked ⚠ change live data on SSG when the gateway points to production. Sample bodies use placeholder values.\n\nTests:\n- Every request has tests. Run the whole collection with the Postman Runner or `postman collection run`.\n- Requests marked ⚠ are skipped unless the variable `allowWrites` is \"true\". Only enable it against the SSG sandbox, or when you mean to change live data.\n- Create requests save new IDs (runId, sessionId, trainerId, enrolmentReferenceNumber, assessmentReferenceNumber) for the requests after them.\n\nTests:\n- Every request has tests. Run the whole collection with the Postman Runner or `postman collection run`.\n- Requests marked ⚠ are skipped unless the variable `allowWrites` is \"true\". Only enable it against the SSG sandbox, or when you mean to change live data.\n- Create requests save new IDs (runId, sessionId, trainerId, enrolmentReferenceNumber, assessmentReferenceNumber) for the requests after them.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "courseReferenceNumber",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "runId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "trainerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "enrolmentReferenceNumber",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "assessmentReferenceNumber",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "grantReferenceNumber",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "claimId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "nric",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "allowWrites",
+      "value": "false",
+      "type": "string",
+      "description": "Set to \"true\" to run requests marked ⚠, which change data on SSG."
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"UP\",\n  \"ssgEnvironment\": \"https://mock-api.ssg-wsg.sg\",\n  \"timestamp\": \"2026-11-24T06:14:31.436Z\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Gateway is UP', () => pm.expect(pm.response.json().status).to.equal('UP'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Get course details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/courses/{{courseReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "courses",
+                "{{courseReferenceNumber}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses/{{courseReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses",
+                    "{{courseReferenceNumber}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"courses\": [\n        {\n          \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n          \"title\": \"Sample Course Title\",\n          \"totalTrainingDurationHour\": 16,\n          \"totalCostOfTrainingPerTrainee\": 1000\n        }\n      ]\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Course data is returned', () => {",
+                  "    pm.expect(ssg?.data).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get course runs by course",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/courses/{{courseReferenceNumber}}/runs?pageSize=20&page=0&includeExpiredCourses=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "courses",
+                "{{courseReferenceNumber}}",
+                "runs"
+              ],
+              "query": [
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "includeExpiredCourses",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Needs the \"Course runs by course reference\" subscription on the SSG portal."
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses/{{courseReferenceNumber}}/runs?pageSize=20&page=0&includeExpiredCourses=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses",
+                    "{{courseReferenceNumber}}",
+                    "runs"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "includeExpiredCourses",
+                      "value": "true"
+                    }
+                  ]
+                },
+                "description": "Needs the \"Course runs by course reference\" subscription on the SSG portal."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"course\": {\n        \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n        \"title\": \"Sample Course Title\",\n        \"runs\": [\n          {\n            \"id\": 2487,\n            \"courseDates\": {\n              \"start\": 20261220,\n              \"end\": 20261221\n            }\n          }\n        ]\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "403 Not subscribed",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/courses/{{courseReferenceNumber}}/runs?pageSize=20&page=0&includeExpiredCourses=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "courses",
+                    "{{courseReferenceNumber}}",
+                    "runs"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "includeExpiredCourses",
+                      "value": "true"
+                    }
+                  ]
+                },
+                "description": "Needs the \"Course runs by course reference\" subscription on the SSG portal."
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG getCourseRunsByCourse failed with HTTP 403\",\n  \"api\": \"getCourseRunsByCourse\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Course data is returned', () => {",
+                  "    pm.expect(ssg?.data).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Course Runs & Sessions",
+      "item": [
+        {
+          "name": "⚠ Publish course run",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/course-runs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "course-runs"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": {\n    \"courseReferenceNumber\": \"{{courseReferenceNumber}}\",\n    \"runs\": [\n      {\n        \"sequenceNumber\": 0,\n        \"registrationDates\": {\n          \"opening\": 20261201,\n          \"closing\": 20261215\n        },\n        \"courseDates\": {\n          \"start\": 20261220,\n          \"end\": 20261221\n        },\n        \"scheduleInfoType\": {\n          \"code\": \"01\",\n          \"description\": \"Description\"\n        },\n        \"scheduleInfo\": \"Sat / 9am - 6pm\",\n        \"venue\": {\n          \"block\": \"1\",\n          \"street\": \"Example Street\",\n          \"floor\": \"01\",\n          \"unit\": \"01\",\n          \"building\": \"Example Building\",\n          \"postalCode\": \"123456\",\n          \"room\": \"Room 1\",\n          \"wheelChairAccess\": true\n        },\n        \"intakeSize\": 20,\n        \"threshold\": 0,\n        \"registeredUserCount\": 0,\n        \"modeOfTraining\": \"1\",\n        \"courseAdminEmail\": \"admin@example.com\",\n        \"courseVacancy\": {\n          \"code\": \"A\",\n          \"description\": \"Available\"\n        },\n        \"sessions\": [\n          {\n            \"startDate\": \"20261220\",\n            \"endDate\": \"20261220\",\n            \"startTime\": \"09:00\",\n            \"endTime\": \"18:00\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"1\",\n              \"street\": \"Example Street\",\n              \"floor\": \"01\",\n              \"unit\": \"01\",\n              \"building\": \"Example Building\",\n              \"postalCode\": \"123456\",\n              \"room\": \"Room 1\",\n              \"wheelChairAccess\": true\n            }\n          }\n        ],\n        \"linkCourseRunTrainer\": [\n          {\n            \"trainer\": {\n              \"trainerType\": {\n                \"code\": \"1\",\n                \"description\": \"Existing\"\n              },\n              \"indexNumber\": 0,\n              \"id\": \"{{trainerId}}\",\n              \"name\": \"Trainer Name\",\n              \"email\": \"trainer@example.com\"\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"courseReferenceNumber\": \"{{courseReferenceNumber}}\",\n    \"runs\": [\n      {\n        \"sequenceNumber\": 0,\n        \"registrationDates\": {\n          \"opening\": 20261201,\n          \"closing\": 20261215\n        },\n        \"courseDates\": {\n          \"start\": 20261220,\n          \"end\": 20261221\n        },\n        \"scheduleInfoType\": {\n          \"code\": \"01\",\n          \"description\": \"Description\"\n        },\n        \"scheduleInfo\": \"Sat / 9am - 6pm\",\n        \"venue\": {\n          \"block\": \"1\",\n          \"street\": \"Example Street\",\n          \"floor\": \"01\",\n          \"unit\": \"01\",\n          \"building\": \"Example Building\",\n          \"postalCode\": \"123456\",\n          \"room\": \"Room 1\",\n          \"wheelChairAccess\": true\n        },\n        \"intakeSize\": 20,\n        \"threshold\": 0,\n        \"registeredUserCount\": 0,\n        \"modeOfTraining\": \"1\",\n        \"courseAdminEmail\": \"admin@example.com\",\n        \"courseVacancy\": {\n          \"code\": \"A\",\n          \"description\": \"Available\"\n        },\n        \"sessions\": [\n          {\n            \"startDate\": \"20261220\",\n            \"endDate\": \"20261220\",\n            \"startTime\": \"09:00\",\n            \"endTime\": \"18:00\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"1\",\n              \"street\": \"Example Street\",\n              \"floor\": \"01\",\n              \"unit\": \"01\",\n              \"building\": \"Example Building\",\n              \"postalCode\": \"123456\",\n              \"room\": \"Room 1\",\n              \"wheelChairAccess\": true\n            }\n          }\n        ],\n        \"linkCourseRunTrainer\": [\n          {\n            \"trainer\": {\n              \"trainerType\": {\n                \"code\": \"1\",\n                \"description\": \"Existing\"\n              },\n              \"indexNumber\": 0,\n              \"id\": \"{{trainerId}}\",\n              \"name\": \"Trainer Name\",\n              \"email\": \"trainer@example.com\"\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"runs\": [\n        {\n          \"id\": 2487\n        }\n      ]\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "400 Missing course reference",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"courseReferenceNumber\": \"{{courseReferenceNumber}}\",\n    \"runs\": [\n      {\n        \"sequenceNumber\": 0,\n        \"registrationDates\": {\n          \"opening\": 20261201,\n          \"closing\": 20261215\n        },\n        \"courseDates\": {\n          \"start\": 20261220,\n          \"end\": 20261221\n        },\n        \"scheduleInfoType\": {\n          \"code\": \"01\",\n          \"description\": \"Description\"\n        },\n        \"scheduleInfo\": \"Sat / 9am - 6pm\",\n        \"venue\": {\n          \"block\": \"1\",\n          \"street\": \"Example Street\",\n          \"floor\": \"01\",\n          \"unit\": \"01\",\n          \"building\": \"Example Building\",\n          \"postalCode\": \"123456\",\n          \"room\": \"Room 1\",\n          \"wheelChairAccess\": true\n        },\n        \"intakeSize\": 20,\n        \"threshold\": 0,\n        \"registeredUserCount\": 0,\n        \"modeOfTraining\": \"1\",\n        \"courseAdminEmail\": \"admin@example.com\",\n        \"courseVacancy\": {\n          \"code\": \"A\",\n          \"description\": \"Available\"\n        },\n        \"sessions\": [\n          {\n            \"startDate\": \"20261220\",\n            \"endDate\": \"20261220\",\n            \"startTime\": \"09:00\",\n            \"endTime\": \"18:00\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"1\",\n              \"street\": \"Example Street\",\n              \"floor\": \"01\",\n              \"unit\": \"01\",\n              \"building\": \"Example Building\",\n              \"postalCode\": \"123456\",\n              \"room\": \"Room 1\",\n              \"wheelChairAccess\": true\n            }\n          }\n        ],\n        \"linkCourseRunTrainer\": [\n          {\n            \"trainer\": {\n              \"trainerType\": {\n                \"code\": \"1\",\n                \"description\": \"Existing\"\n              },\n              \"indexNumber\": 0,\n              \"id\": \"{{trainerId}}\",\n              \"name\": \"Trainer Name\",\n              \"email\": \"trainer@example.com\"\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): course.courseReferenceNumber\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('New run ID is returned', () => {",
+                  "    pm.expect(ssg?.data?.runs?.[0]?.id).to.exist;",
+                  "});",
+                  "",
+                  "// Save the new run ID for the next requests",
+                  "const runIdValue = ssg.data.runs?.[0]?.id;",
+                  "if (runIdValue) pm.collectionVariables.set('runId', String(runIdValue));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get course run by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}?includeExpiredCourses=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "course-runs",
+                "{{runId}}"
+              ],
+              "query": [
+                {
+                  "key": "includeExpiredCourses",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}?includeExpiredCourses=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs",
+                    "{{runId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeExpiredCourses",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"course\": {\n        \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n        \"externalReferenceNumber\": \"TEST 166\",\n        \"title\": \"Certificate of Competency in Earth Control Measures For Construction Site Personnel\",\n        \"expireFlag\": false,\n        \"deleteFlag\": false,\n        \"support\": [\n          {\n            \"detailsId\": 427435,\n            \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n            \"period\": {\n              \"from\": 20190529,\n              \"to\": 20190530\n            },\n            \"effectiveDate\": 20140821,\n            \"category\": \"PUBLIC_AGENCY\",\n            \"supportCode\": \"PUBLIC_AGENCY\",\n            \"meta\": {\n              \"createBy\": \"SYSTEM\",\n              \"createDate\": \"2017-06-01T16:25:27.42\",\n              \"updateBy\": \"Batch Processing\",\n              \"updateDate\": \"2017-06-06T16:25:27.42\"\n            }\n          }\n        ],\n        \"run\": {\n          \"id\": 14111,\n          \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n          \"registrationOpeningDate\": 20191022,\n          \"registrationClosingDate\": 20191025,\n          \"courseStartDate\": 20191101,\n          \"courseEndDate\": 20191105,\n          \"scheduleInfoType\": {\n            \"code\": \"01\",\n            \"description\": \"Description\"\n          },\n          \"scheduleInfo\": \"Sat / 5 Sats / 9am - 6pm\",\n          \"venue\": {\n            \"block\": \"112A\",\n            \"street\": \"Street ABC\",\n            \"floor\": \"15\",\n            \"unit\": \"001\",\n            \"building\": \"Building ABC\",\n            \"postalCode\": 123455,\n            \"room\": \"24\",\n            \"wheelChairAccess\": true\n          },\n          \"intakeSize\": 70,\n          \"threshold\": 10,\n          \"registeredUserCount\": 20,\n          \"organizationKey\": \"10000000K\",\n          \"modeOfTraining\": \"1\",\n          \"courseAdminEmail\": \"sample@gmail.com\",\n          \"qrCodeLink\": \"https://ldw4okcf96.execute-api.ap-southeast-1.amazonaws.com/dev/course-runs/8330657C-8A9A-46B1-A2CA-50C5750B7CC5\",\n          \"file\": {\n            \"name\": \"ABC.jpg\",\n            \"content\": \"iVBORw0KGgoAAAANSUhEUgAAAF0AAAAeCAYAAABOvRIBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7VrfS+tIFPZvDqUgQYJQLmahyFaQi+USBBesrMslQi9YocgVrHDrQxAXKWx8KNiLFCQsQQjl2xOd1mRyJpl03XQf/OB7ac7MpF/m/JiTrOEDleND9BXgQ/QVoJTok1MbhmEkaKP3U1wswvMEo3MX7W0L1npyDgN1y4K9c4DetY8gEvbLIgrgX/dwvNeEZdVT6xjrtPZ2G8enQ/hPZRfy4CTnillr6v1/z0mN++9FnwUYne7CqiXH5bBuo3M9FYNLYDbF8PeW/jpE63MPo0CMLwQjesy9AUJhoUS1oofw9k1pjB6bpxMxhwaCW3Q+8fMUsmbBudJ5yArRDROOV+A1VYoefG9J9mVoonMnJspDSGJscOPL0ES7UHiV6MSNDkYzYcahMtFntPvMpO0rrc8uvHGIaH6TUYix52LXytoa233ke/8EvSYzjljfctDzxgifhSkihI8+BsoQZKP7IExZ5IhOtPM8szLR711YKVsDpjNUx79wCCfzkJbzpOa3MUmcg+kAbc47tnr0GFXIF92otXDxJExlVCa6tFBM51pcU8D/amXGtK9U8o3hNtK2Mc2jkbhegIcempkdnxefC0QnKjfVKkW3/vDFRQXuOjClMUq3ZWwN04G3CCfFGJ800uNjfhkqvKRYdGUeqkz04AKtlG1ME7snHqYFyV4HnFdo7/I5nvpoSnMYNXpwbFJkROdyQ8OFL4+vTHRKgRc7Sdsk67B2HLjnt/AfKamKEfrg5y4KX1n4cDfleRqKhMqI7nTR3ZJ+IzbPJO+sTnQCGzcZ1ugh0EnRPR9hohUeJuhm6vKCe2ERYbAnz0MPzxOXU2BE3ydDLszV2hgkg3ulohPCv1w94RO0fj3G8DFv/3PxlaoH7dPlG7x9eR5V8laITg+OOwCadG0xS9WivyAYob9vo15G/NyTIic6xWJxtQw40fnkrRKdEFIJylRCi6S6EtHnEM2ogx0bZj05j4omDm40d93KdvorJmfN9LWY87p/paJLiMIp/Js+XKeFhtR5XJCqgbGwfwOXAJe5F0VCZl0mX3TM6J6Yc0PrO+2E/5PoaUSY/jhAI+OmFtx7YbLAe1UvI6ZVUaJ6SYoeQ3F2GF5WITqzeOOb+oCdRHCeddOX3SJhdMQkr8NbcVUTYxcNaY5SdbosOp1Hhw5zXxvp39amTCzi3YuWzcQ/hejPlFhSdsTC5pWA5Iox2cT2p0apVoDbQ6btvDdQnBt0RCc80aGwoGBY4/5k84yrGriaVlUxTNDLHBoaTJjIgtvp7P0ouphxqaal+0MXtjQ2ZvsHL7m26IRsREhzLV4842LcruT+5KeusivHiWds0EPKU4TtjXMx/RWqLmPj6BZBTn87Gvexy3UZ2aQ9h77oqqQ6J8V0LpnQjf82XJwOo3CMwZesKzZO1LeI5yFTuxLj13GXPqbh246K/qYq5rIDmysj84SYqfvphrULl+unH9J5gbMv9MQSosfgkqrgSyItcgeWef1jgfCqzY/VpqpOT+Bd3hzVs/2SDEqKrkiqMV+rl7wdwzLuO+tEzhD+VybMaFL7Pemq3pHmik5QJNW3kjGkOLQtfbLAcYm39dNrRehQcd3G8U3J42XZrw6I9V86BT2eJJYQncBFEalOjxDcD3BMx/TUtyl1E9ZWCwen/6IXPosw8RTfo8Rdxk0bLcdF/27y9v50Gby8cxXrbJrp+B1/9/LyP97puxcN0bmkKon+gSrwIXrlAP4BXnLjwQUvGmYAAAAASUVORK5CYII=\"\n          },\n          \"attendanceTaken\": false,\n          \"linkCourseRunTrainer\": [\n            {\n              \"trainer\": {\n                \"indexNumber\": 0,\n                \"id\": \"FE9DA6F2-103D-4E2A-8AD1-013D8E246E00\",\n                \"name\": \"string\",\n                \"inTrainingProviderProfile\": true,\n                \"domainAreaOfPractice\": \"Testing Management in Computer Application and Diploma in Computer Application\",\n                \"experience\": \"Testing ABC\",\n                \"linkedInURL\": \"https://sg.linkedin.com/company/linkedin/abc\",\n                \"organizationKey\": \"TxxxxxxxxM\",\n                \"salutationId\": 1,\n                \"photo\": {\n                  \"name\": \"abc.jpg\",\n                  \"content\": \"iVBORw0KGgoAAAANSUhEUgAAAF0AAAAeCAYAAABOvRIBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7VrfS+tIFPZvDqUgQYJQLmahyFaQi+USBBesrMslQi9YocgVrHDrQxAXKWx8KNiLFCQsQQjl2xOd1mRyJpl03XQf/OB7ac7MpF/m/JiTrOEDleND9BXgQ/QVoJTok1MbhmEkaKP3U1wswvMEo3MX7W0L1npyDgN1y4K9c4DetY8gEvbLIgrgX/dwvNeEZdVT6xjrtPZ2G8enQ/hPZRfy4CTnillr6v1/z0mN++9FnwUYne7CqiXH5bBuo3M9FYNLYDbF8PeW/jpE63MPo0CMLwQjesy9AUJhoUS1oofw9k1pjB6bpxMxhwaCW3Q+8fMUsmbBudJ5yArRDROOV+A1VYoefG9J9mVoonMnJspDSGJscOPL0ES7UHiV6MSNDkYzYcahMtFntPvMpO0rrc8uvHGIaH6TUYix52LXytoa233ke/8EvSYzjljfctDzxgifhSkihI8+BsoQZKP7IExZ5IhOtPM8szLR711YKVsDpjNUx79wCCfzkJbzpOa3MUmcg+kAbc47tnr0GFXIF92otXDxJExlVCa6tFBM51pcU8D/amXGtK9U8o3hNtK2Mc2jkbhegIcempkdnxefC0QnKjfVKkW3/vDFRQXuOjClMUq3ZWwN04G3CCfFGJ800uNjfhkqvKRYdGUeqkz04AKtlG1ME7snHqYFyV4HnFdo7/I5nvpoSnMYNXpwbFJkROdyQ8OFL4+vTHRKgRc7Sdsk67B2HLjnt/AfKamKEfrg5y4KX1n4cDfleRqKhMqI7nTR3ZJ+IzbPJO+sTnQCGzcZ1ugh0EnRPR9hohUeJuhm6vKCe2ERYbAnz0MPzxOXU2BE3ydDLszV2hgkg3ulohPCv1w94RO0fj3G8DFv/3PxlaoH7dPlG7x9eR5V8laITg+OOwCadG0xS9WivyAYob9vo15G/NyTIic6xWJxtQw40fnkrRKdEFIJylRCi6S6EtHnEM2ogx0bZj05j4omDm40d93KdvorJmfN9LWY87p/paJLiMIp/Js+XKeFhtR5XJCqgbGwfwOXAJe5F0VCZl0mX3TM6J6Yc0PrO+2E/5PoaUSY/jhAI+OmFtx7YbLAe1UvI6ZVUaJ6SYoeQ3F2GF5WITqzeOOb+oCdRHCeddOX3SJhdMQkr8NbcVUTYxcNaY5SdbosOp1Hhw5zXxvp39amTCzi3YuWzcQ/hejPlFhSdsTC5pWA5Iox2cT2p0apVoDbQ6btvDdQnBt0RCc80aGwoGBY4/5k84yrGriaVlUxTNDLHBoaTJjIgtvp7P0ouphxqaal+0MXtjQ2ZvsHL7m26IRsREhzLV4842LcruT+5KeusivHiWds0EPKU4TtjXMx/RWqLmPj6BZBTn87Gvexy3UZ2aQ9h77oqqQ6J8V0LpnQjf82XJwOo3CMwZesKzZO1LeI5yFTuxLj13GXPqbh246K/qYq5rIDmysj84SYqfvphrULl+unH9J5gbMv9MQSosfgkqrgSyItcgeWef1jgfCqzY/VpqpOT+Bd3hzVs/2SDEqKrkiqMV+rl7wdwzLuO+tEzhD+VybMaFL7Pemq3pHmik5QJNW3kjGkOLQtfbLAcYm39dNrRehQcd3G8U3J42XZrw6I9V86BT2eJJYQncBFEalOjxDcD3BMx/TUtyl1E9ZWCwen/6IXPosw8RTfo8Rdxk0bLcdF/27y9v50Gby8cxXrbJrp+B1/9/LyP97puxcN0bmkKon+gSrwIXrlAP4BXnLjwQUvGmYAAAAASUVORK5CYII=\"\n                },\n                \"email\": \"abc@test.com\",\n                \"trainerType\": {\n                  \"code\": \"2\",\n                  \"description\": \"New\"\n                },\n                \"ssecEQAs\": [\n                  {\n                    \"ssecEQA\": {\n                      \"code\": \"12\",\n                      \"description\": \"BEST 4\",\n                      \"version\": \"2020\"\n                    }\n                  }\n                ],\n                \"idNumber\": \"*****916C\",\n                \"idType\": {\n                  \"id\": \"SP\",\n                  \"description\": \"Singapore Pink Identification Card\"\n                },\n                \"uuid\": \"31ABA85A-59D6-41DC-8EDA-95682CB05E49\",\n                \"roles\": [\n                  {\n                    \"role\": {\n                      \"id\": 1,\n                      \"description\": \"Trainer\"\n                    }\n                  }\n                ]\n              }\n            }\n          ],\n          \"courseVacancy\": {\n            \"code\": \"L\",\n            \"description\": \"Limited Vacancy\"\n          }\n        }\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Course reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.course?.referenceNumber).to.be.a('string');",
+                  "});",
+                  "",
+                  "pm.test('Course run list is returned', () => {",
+                  "    pm.expect(ssg?.data?.course?.run).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Update course run",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "course-runs",
+                "{{runId}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": {\n    \"courseReferenceNumber\": \"{{courseReferenceNumber}}\",\n    \"run\": {\n      \"intakeSize\": 25,\n      \"courseVacancy\": {\n        \"code\": \"L\",\n        \"description\": \"Limited Vacancy\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs",
+                    "{{runId}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"courseReferenceNumber\": \"{{courseReferenceNumber}}\",\n    \"run\": {\n      \"intakeSize\": 25,\n      \"courseVacancy\": {\n        \"code\": \"L\",\n        \"description\": \"Limited Vacancy\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {},\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Delete course run",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}?courseReferenceNumber={{courseReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "course-runs",
+                "{{runId}}"
+              ],
+              "query": [
+                {
+                  "key": "courseReferenceNumber",
+                  "value": "{{courseReferenceNumber}}"
+                }
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production."
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}?courseReferenceNumber={{courseReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs",
+                    "{{runId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "courseReferenceNumber",
+                      "value": "{{courseReferenceNumber}}"
+                    }
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {},\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get course sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}/sessions?courseReferenceNumber={{courseReferenceNumber}}&sessionMonth=122026&includeExpiredCourses=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "course-runs",
+                "{{runId}}",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "courseReferenceNumber",
+                  "value": "{{courseReferenceNumber}}"
+                },
+                {
+                  "key": "sessionMonth",
+                  "value": "122026",
+                  "description": "Optional, MMYYYY"
+                },
+                {
+                  "key": "includeExpiredCourses",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}/sessions?courseReferenceNumber={{courseReferenceNumber}}&sessionMonth=122026&includeExpiredCourses=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs",
+                    "{{runId}}",
+                    "sessions"
+                  ],
+                  "query": [
+                    {
+                      "key": "courseReferenceNumber",
+                      "value": "{{courseReferenceNumber}}"
+                    },
+                    {
+                      "key": "sessionMonth",
+                      "value": "122026",
+                      "description": "Optional, MMYYYY"
+                    },
+                    {
+                      "key": "includeExpiredCourses",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"sessions\": [\n        {\n          \"id\": \"Fuchun 019-41618-S1\",\n          \"startDate\": \"20190814\",\n          \"endDate\": \"20190814\",\n          \"startTime\": \"15:30\",\n          \"endTime\": \"17:30\",\n          \"modeOfTraining\": \"1\",\n          \"venue\": {\n            \"block\": \"112A\",\n            \"street\": \"Street ABC\",\n            \"floor\": \"15\",\n            \"unit\": \"001\",\n            \"building\": \"Building ABC\",\n            \"postalCode\": 123455,\n            \"room\": \"24\",\n            \"wheelChairAccess\": true\n          },\n          \"attendanceTaken\": false,\n          \"deleted\": false\n        }\n      ]\n    },\n    \"meta\": {\n      \"total\": 2\n    },\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "400 Missing courseReferenceNumber",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/course-runs/{{runId}}/sessions?courseReferenceNumber={{courseReferenceNumber}}&sessionMonth=122026&includeExpiredCourses=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "course-runs",
+                    "{{runId}}",
+                    "sessions"
+                  ],
+                  "query": [
+                    {
+                      "key": "courseReferenceNumber",
+                      "value": "{{courseReferenceNumber}}"
+                    },
+                    {
+                      "key": "sessionMonth",
+                      "value": "122026",
+                      "description": "Optional, MMYYYY"
+                    },
+                    {
+                      "key": "includeExpiredCourses",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): courseReferenceNumber\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Sessions list is returned', () => {",
+                  "    pm.expect(ssg?.data?.sessions).to.be.an('array');",
+                  "});",
+                  "",
+                  "// Save the first session ID for the attendance requests",
+                  "const sessionIdValue = ssg.data.sessions?.[0]?.id;",
+                  "if (sessionIdValue) pm.collectionVariables.set('sessionId', String(sessionIdValue));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Get session attendance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/attendance/{{runId}}?courseReferenceNumber={{courseReferenceNumber}}&sessionId={{sessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "attendance",
+                "{{runId}}"
+              ],
+              "query": [
+                {
+                  "key": "courseReferenceNumber",
+                  "value": "{{courseReferenceNumber}}"
+                },
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/attendance/{{runId}}?courseReferenceNumber={{courseReferenceNumber}}&sessionId={{sessionId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "attendance",
+                    "{{runId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "courseReferenceNumber",
+                      "value": "{{courseReferenceNumber}}"
+                    },
+                    {
+                      "key": "sessionId",
+                      "value": "{{sessionId}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"courseRun\": {\n        \"id\": 14111,\n        \"title\": \"Certificate of Competency in Earth Control Measures\",\n        \"referenceNumber\": \"XX-S1234567A-01-TEST 166\",\n        \"externalReferenceNumber\": \"TEST 166\",\n        \"modeOfTraining\": \"1\",\n        \"courseDates\": {\n          \"start\": 20191101,\n          \"end\": 20191105\n        },\n        \"sessions\": [\n          {\n            \"id\": \"TEST 166-41618-S1\",\n            \"startDate\": \"20190814\",\n            \"endDate\": \"20190814\",\n            \"startTime\": \"15:30\",\n            \"endTime\": \"17:30\",\n            \"modeOfTraining\": \"1\",\n            \"venue\": {\n              \"block\": \"112A\",\n              \"street\": \"Street ABC\",\n              \"floor\": \"15\",\n              \"unit\": \"001\",\n              \"building\": \"Building ABC\",\n              \"postalCode\": 123455,\n              \"room\": \"24\",\n              \"wheelChairAccess\": true\n            },\n            \"attendance\": [\n              {\n                \"id\": 1394,\n                \"entryMode\": \"Manual\",\n                \"status\": \"Confirmed\",\n                \"nric\": \"S1234567A\",\n                \"editedByTP\": \"No\",\n                \"sentToTraqom\": \"Pending Upload to TRAQOM:\",\n                \"latitude\": \"116.397128\",\n                \"longitude\": \"39.916527\",\n                \"manuallyAdded\": false,\n                \"trainee\": {\n                  \"individualId\": \"5BD398B2-066B-4814-BF64-D1014A8658F2\",\n                  \"accountType\": \"singPass\",\n                  \"name\": \"rosy\",\n                  \"id\": \"SS2312345H\",\n                  \"attendeeType\": \"Trainee\",\n                  \"idType\": {\n                    \"code\": \"SB\",\n                    \"description\": \"Singapore Blue Identification Card\"\n                  },\n                  \"email\": \"abc@test.com\",\n                  \"contactNumber\": {\n                    \"countryCode\": 86,\n                    \"areaCode\": 357,\n                    \"mobile\": \"85858585\"\n                  },\n                  \"surveyLanguage\": {\n                    \"code\": \"EL\",\n                    \"description\": \"English\"\n                  }\n                },\n                \"errorMessage\": null\n              }\n            ]\n          }\n        ]\n      }\n    },\n    \"meta\": {\n      \"total\": 2\n    },\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "400 Missing query parameters",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/attendance/{{runId}}?courseReferenceNumber={{courseReferenceNumber}}&sessionId={{sessionId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "attendance",
+                    "{{runId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "courseReferenceNumber",
+                      "value": "{{courseReferenceNumber}}"
+                    },
+                    {
+                      "key": "sessionId",
+                      "value": "{{sessionId}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): courseReferenceNumber, sessionId\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Course run details are returned', () => {",
+                  "    pm.expect(ssg?.data?.courseRun).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Upload session attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/attendance/{{runId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "attendance",
+                "{{runId}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": {\n    \"sessionID\": \"{{sessionId}}\",\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"attendance\": {\n      \"status\": {\n        \"code\": \"1\"\n      },\n      \"trainee\": {\n        \"id\": \"{{nric}}\",\n        \"name\": \"Trainee Name\",\n        \"email\": \"trainee@example.com\",\n        \"idType\": {\n          \"code\": \"SB\"\n        },\n        \"contactNumber\": {\n          \"mobile\": \"91234567\",\n          \"areaCode\": null,\n          \"countryCode\": 65\n        },\n        \"numberOfHours\": 8,\n        \"surveyLanguage\": {\n          \"code\": \"EL\"\n        }\n      }\n    }\n  },\n  \"corppassId\": \"<CorpPass ID of the submitting officer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/attendance/{{runId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "attendance",
+                    "{{runId}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"sessionID\": \"{{sessionId}}\",\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"attendance\": {\n      \"status\": {\n        \"code\": \"1\"\n      },\n      \"trainee\": {\n        \"id\": \"{{nric}}\",\n        \"name\": \"Trainee Name\",\n        \"email\": \"trainee@example.com\",\n        \"idType\": {\n          \"code\": \"SB\"\n        },\n        \"contactNumber\": {\n          \"mobile\": \"91234567\",\n          \"areaCode\": null,\n          \"countryCode\": 65\n        },\n        \"numberOfHours\": 8,\n        \"surveyLanguage\": {\n          \"code\": \"EL\"\n        }\n      }\n    }\n  },\n  \"corppassId\": \"<CorpPass ID of the submitting officer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {},\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Trainers",
+      "description": "Needs the Trainer subscriptions on the SSG portal.",
+      "item": [
+        {
+          "name": "List trainers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/trainers?pageSize=20&page=0&keyword=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "trainers"
+              ],
+              "query": [
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "keyword",
+                  "value": "",
+                  "description": "Optional"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/trainers?pageSize=20&page=0&keyword=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "trainers"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "keyword",
+                      "value": "",
+                      "description": "Optional"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"trainers\": [\n        {\n          \"id\": \"92ca3b62-cb5c-4e08-83f6-9e717c9b5f39\",\n          \"name\": \"lp add trainer\",\n          \"domainAreaOfPractice\": \"EduTrust Star\",\n          \"experience\": \"My experience ABC\",\n          \"linkedInURL\": \"www.test.com.sg\",\n          \"email\": \"newtraineremail@test.com\",\n          \"salutationId\": 1,\n          \"totalCourseRunLinkWithTrainer\": 2,\n          \"qualifications\": [\n            {\n              \"description\": \"My qualification ABC\",\n              \"level\": {\n                \"code\": \"21\",\n                \"description\": \"Secondary Education without GCE 'O' / 'N' Level or equivalent\",\n                \"version\": \"2020\"\n              }\n            }\n          ],\n          \"photo\": {\n            \"name\": \"icon-person-128.png\",\n            \"content\": \"iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAABW9JREFUeJzt3ctrXVUU\"\n          },\n          \"idNumber\": \"S1234567A\",\n          \"idType\": {\n            \"id\": \"SP\",\n            \"description\": \"Singapore Pink Identification Card\"\n          },\n          \"uuid\": \"31ABA85A-59D6-41DC-8EDA-95682CB05E49\",\n          \"roles\": [\n            {\n              \"role\": {\n                \"id\": 1,\n                \"description\": \"Trainer\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    \"meta\": {\n      \"total\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "403 Not subscribed (production today)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/trainers?pageSize=20&page=0&keyword=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "trainers"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "keyword",
+                      "value": "",
+                      "description": "Optional"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG getTrainers failed with HTTP 403\",\n  \"api\": \"getTrainers\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Trainers list is returned', () => {",
+                  "    pm.expect(ssg?.data?.trainers).to.be.an('array');",
+                  "});",
+                  "",
+                  "// Save the first trainer ID for the trainer requests",
+                  "const trainerIdValue = ssg.data.trainers?.[0]?.id;",
+                  "if (trainerIdValue) pm.collectionVariables.set('trainerId', String(trainerIdValue));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Update trainer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/trainers/{{trainerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "trainers",
+                "{{trainerId}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trainer\": {\n    \"name\": \"Trainer Name\",\n    \"email\": \"trainer@example.com\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/trainers/{{trainerId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "trainers",
+                    "{{trainerId}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"trainer\": {\n    \"name\": \"Trainer Name\",\n    \"email\": \"trainer@example.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {},\n    \"error\": {},\n    \"status\": 200\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Delete trainer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/trainers/{{trainerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "trainers",
+                "{{trainerId}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production."
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/trainers/{{trainerId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "trainers",
+                    "{{trainerId}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {},\n    \"error\": {},\n    \"status\": 200\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Enrolments",
+      "item": [
+        {
+          "name": "⚠ Create enrolment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    },\n    \"trainee\": {\n      \"id\": \"{{nric}}\",\n      \"idType\": {\n        \"type\": \"NRIC\"\n      },\n      \"fullName\": \"Trainee Name\",\n      \"dateOfBirth\": \"1990-01-31\",\n      \"emailAddress\": \"trainee@example.com\",\n      \"contactNumber\": {\n        \"countryCode\": \"+65\",\n        \"areaCode\": \"\",\n        \"phoneNumber\": \"91234567\"\n      },\n      \"enrolmentDate\": \"2026-12-01\",\n      \"sponsorshipType\": \"EMPLOYER\",\n      \"employer\": {\n        \"uen\": \"<employer UEN>\",\n        \"contact\": {\n          \"fullName\": \"HR Contact\",\n          \"emailAddress\": \"hr@example.com\",\n          \"contactNumber\": {\n            \"countryCode\": \"+65\",\n            \"areaCode\": \"\",\n            \"phoneNumber\": \"61234567\"\n          }\n        }\n      },\n      \"fees\": {\n        \"discountAmount\": 0,\n        \"collectionStatus\": \"Pending Payment\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    },\n    \"trainee\": {\n      \"id\": \"{{nric}}\",\n      \"idType\": {\n        \"type\": \"NRIC\"\n      },\n      \"fullName\": \"Trainee Name\",\n      \"dateOfBirth\": \"1990-01-31\",\n      \"emailAddress\": \"trainee@example.com\",\n      \"contactNumber\": {\n        \"countryCode\": \"+65\",\n        \"areaCode\": \"\",\n        \"phoneNumber\": \"91234567\"\n      },\n      \"enrolmentDate\": \"2026-12-01\",\n      \"sponsorshipType\": \"EMPLOYER\",\n      \"employer\": {\n        \"uen\": \"<employer UEN>\",\n        \"contact\": {\n          \"fullName\": \"HR Contact\",\n          \"emailAddress\": \"hr@example.com\",\n          \"contactNumber\": {\n            \"countryCode\": \"+65\",\n            \"areaCode\": \"\",\n            \"phoneNumber\": \"61234567\"\n          }\n        }\n      },\n      \"fees\": {\n        \"discountAmount\": 0,\n        \"collectionStatus\": \"Pending Payment\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2612-000001\",\n        \"status\": \"Confirmed\"\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "400 Missing enrolment",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    },\n    \"trainee\": {\n      \"id\": \"{{nric}}\",\n      \"idType\": {\n        \"type\": \"NRIC\"\n      },\n      \"fullName\": \"Trainee Name\",\n      \"dateOfBirth\": \"1990-01-31\",\n      \"emailAddress\": \"trainee@example.com\",\n      \"contactNumber\": {\n        \"countryCode\": \"+65\",\n        \"areaCode\": \"\",\n        \"phoneNumber\": \"91234567\"\n      },\n      \"enrolmentDate\": \"2026-12-01\",\n      \"sponsorshipType\": \"EMPLOYER\",\n      \"employer\": {\n        \"uen\": \"<employer UEN>\",\n        \"contact\": {\n          \"fullName\": \"HR Contact\",\n          \"emailAddress\": \"hr@example.com\",\n          \"contactNumber\": {\n            \"countryCode\": \"+65\",\n            \"areaCode\": \"\",\n            \"phoneNumber\": \"61234567\"\n          }\n        }\n      },\n      \"fees\": {\n        \"discountAmount\": 0,\n        \"collectionStatus\": \"Pending Payment\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): enrolment\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Enrolment reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.enrolment?.referenceNumber).to.be.a('string');",
+                  "});",
+                  "",
+                  "// Save the new enrolment reference for the next requests",
+                  "const enrolmentReferenceNumberValue = ssg.data?.enrolment?.referenceNumber;",
+                  "if (enrolmentReferenceNumberValue) pm.collectionVariables.set('enrolmentReferenceNumber', String(enrolmentReferenceNumberValue));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search enrolments",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments",
+                "search"
+              ]
+            },
+            "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/search",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "search"
+                  ]
+                },
+                "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": [\n      {\n        \"enrolment\": {\n          \"referenceNumber\": \"ENR-2612-000001\",\n          \"status\": \"Confirmed\",\n          \"course\": {\n            \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n            \"run\": {\n              \"id\": \"2487\"\n            }\n          },\n          \"trainee\": {\n            \"id\": \"S1234567A\",\n            \"fullName\": \"Trainee Name\",\n            \"fees\": {\n              \"discountAmount\": 0,\n              \"collectionStatus\": \"Pending Payment\"\n            }\n          }\n        }\n      }\n    ],\n    \"meta\": {\n      \"total\": 1\n    },\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "401 Missing gateway API key",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/search",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "search"
+                  ]
+                },
+                "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"enrolment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or missing x-api-key\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Results list is returned', () => {",
+                  "    pm.expect(ssg?.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "View enrolment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments",
+                "{{enrolmentReferenceNumber}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "{{enrolmentReferenceNumber}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2612-000001\",\n        \"status\": \"Confirmed\",\n        \"course\": {\n          \"referenceNumber\": \"XX-Txxxxxxx01-01-TEST 166\",\n          \"run\": {\n            \"id\": \"2487\"\n          }\n        },\n        \"trainee\": {\n          \"id\": \"S1234567A\",\n          \"fullName\": \"Trainee Name\",\n          \"fees\": {\n            \"discountAmount\": 0,\n            \"collectionStatus\": \"Pending Payment\"\n          }\n        }\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Enrolment is returned', () => {",
+                  "    pm.expect(ssg?.data?.enrolment).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Update enrolment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments",
+                "{{enrolmentReferenceNumber}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enrolment\": {\n    \"trainee\": {\n      \"emailAddress\": \"new.email@example.com\",\n      \"fees\": {\n        \"discountAmount\": 0,\n        \"collectionStatus\": \"Full Payment\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "{{enrolmentReferenceNumber}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enrolment\": {\n    \"trainee\": {\n      \"emailAddress\": \"new.email@example.com\",\n      \"fees\": {\n        \"discountAmount\": 0,\n        \"collectionStatus\": \"Full Payment\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2612-000001\"\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Cancel enrolment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments",
+                "{{enrolmentReferenceNumber}}",
+                "cancel"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production."
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "{{enrolmentReferenceNumber}}",
+                    "cancel"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2612-000001\",\n        \"status\": \"Cancelled\"\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Update fee collection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}/fee-collection",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "enrolments",
+                "{{enrolmentReferenceNumber}}",
+                "fee-collection"
+              ]
+            },
+            "description": "collectionStatus: \"Pending Payment\", \"Partial Payment\", \"Full Payment\" or \"Cancelled\".\n\n⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collectionStatus\": \"Full Payment\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (illustrative)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}/fee-collection",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "{{enrolmentReferenceNumber}}",
+                    "fee-collection"
+                  ]
+                },
+                "description": "collectionStatus: \"Pending Payment\", \"Partial Payment\", \"Full Payment\" or \"Cancelled\".\n\n⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionStatus\": \"Full Payment\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2612-000001\"\n      }\n    },\n    \"meta\": {},\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "400 Missing collectionStatus",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/enrolments/{{enrolmentReferenceNumber}}/fee-collection",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "enrolments",
+                    "{{enrolmentReferenceNumber}}",
+                    "fee-collection"
+                  ]
+                },
+                "description": "collectionStatus: \"Pending Payment\", \"Partial Payment\", \"Full Payment\" or \"Cancelled\".\n\n⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionStatus\": \"Full Payment\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): collectionStatus\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Assessments",
+      "item": [
+        {
+          "name": "⚠ Create assessment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/assessments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "assessments"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assessment\": {\n    \"grade\": \"A\",\n    \"score\": 80,\n    \"course\": {\n      \"runId\": \"{{runId}}\",\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    },\n    \"result\": \"Pass\",\n    \"trainee\": {\n      \"idType\": \"NRIC\",\n      \"id\": \"{{nric}}\",\n      \"fullName\": \"Trainee Name\"\n    },\n    \"skillCode\": \"<skill code of the course>\",\n    \"assessmentDate\": \"2026-12-21\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/assessments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "assessments"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assessment\": {\n    \"grade\": \"A\",\n    \"score\": 80,\n    \"course\": {\n      \"runId\": \"{{runId}}\",\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    },\n    \"result\": \"Pass\",\n    \"trainee\": {\n      \"idType\": \"NRIC\",\n      \"id\": \"{{nric}}\",\n      \"fullName\": \"Trainee Name\"\n    },\n    \"skillCode\": \"<skill code of the course>\",\n    \"assessmentDate\": \"2026-12-21\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {\n      \"assessment\": {\n        \"referenceNumber\": \"ASM-1912-432432\"\n      }\n    },\n    \"status\": 200\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Assessment reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.assessment?.referenceNumber).to.be.a('string');",
+                  "});",
+                  "",
+                  "// Save the new assessment reference for the next requests",
+                  "const assessmentReferenceNumberValue = ssg.data?.assessment?.referenceNumber;",
+                  "if (assessmentReferenceNumberValue) pm.collectionVariables.set('assessmentReferenceNumber', String(assessmentReferenceNumberValue));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search assessments",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/assessments/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "assessments",
+                "search"
+              ]
+            },
+            "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"assessment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/assessments/search",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "assessments",
+                    "search"
+                  ]
+                },
+                "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"assessment\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": [\n      {\n        \"meta\": {\n          \"createdOn\": \"2020-07-21T17:32:28Z\",\n          \"updatedOn\": \"2020-07-21T17:32:28Z\"\n        },\n        \"grade\": \"B\",\n        \"score\": 80,\n        \"course\": {\n          \"run\": {\n            \"id\": \"10026\",\n            \"endDate\": \"2021-03-14\",\n            \"startDate\": \"2020-03-15\"\n          },\n          \"title\": \"Legal Aspects of Workplace Safety, Health & Environment in Site Supervision\",\n          \"referenceNumber\": \"TGS-0026008-ES\"\n        },\n        \"result\": \"Pass\",\n        \"trainee\": {\n          \"id\": \"S1234567A\",\n          \"idType\": {\n            \"type\": \"NRIC\"\n          },\n          \"fullName\": \"Jon Chua\"\n        },\n        \"enrolment\": {\n          \"referenceNumber\": \"ENR-2001-123456\"\n        },\n        \"skillCode\": \"TGS-MKG-234222\",\n        \"assessmentDate\": \"2020-05-15\",\n        \"referenceNumber\": \"ASM-1912-432432\",\n        \"trainingPartner\": {\n          \"uen\": \"T16GB0003C\",\n          \"code\": \"T16GB0003C-01\",\n          \"name\": \"Trainers Inc.\"\n        },\n        \"conferringInstitute\": {\n          \"uen\": \"T16GB0003C\",\n          \"code\": \"T16GB0003C-01\",\n          \"name\": \"Assessors Inc.\"\n        }\n      }\n    ],\n    \"meta\": {\n      \"totalRecords\": 1\n    },\n    \"status\": \"200\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Results list is returned', () => {",
+                  "    pm.expect(ssg?.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "View assessment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "assessments",
+                "{{assessmentReferenceNumber}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "assessments",
+                    "{{assessmentReferenceNumber}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": \"200\",\n    \"data\": {\n      \"referenceNumber\": \"ASM-1912-432432\",\n      \"trainingPartner\": {\n        \"code\": \"T16GB0003C-01\",\n        \"uen\": \"T16GB0003C\",\n        \"name\": \"Trainers Inc.\"\n      },\n      \"course\": {\n        \"referenceNumber\": \"TGS-0026008-ES\",\n        \"title\": \"Legal Aspects of Workplace Safety, Health & Environment in Site Supervision\",\n        \"run\": {\n          \"id\": \"10026\",\n          \"startDate\": \"2020-03-15\",\n          \"endDate\": \"2021-03-14\"\n        }\n      },\n      \"trainee\": {\n        \"idType\": {\n          \"type\": \"NRIC\"\n        },\n        \"id\": \"S1234567A\",\n        \"fullName\": \"Jon Chua\"\n      },\n      \"result\": \"Pass\",\n      \"score\": 80,\n      \"grade\": \"B\",\n      \"assessmentDate\": \"2020-05-15\",\n      \"conferringInstitute\": {\n        \"code\": \"T16GB0003C-01\",\n        \"uen\": \"T16GB0003C\",\n        \"name\": \"Assessors Inc.\"\n      },\n      \"skillCode\": \"TGS-MKG-234222\",\n      \"enrolment\": {\n        \"referenceNumber\": \"ENR-2001-123456\"\n      },\n      \"meta\": {\n        \"createdOn\": \"2020-07-21T17:32:28Z\",\n        \"updatedOn\": \"2020-07-21T17:32:28Z\"\n      }\n    }\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Assessment reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.referenceNumber).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Update assessment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "assessments",
+                "{{assessmentReferenceNumber}}"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assessment\": {\n    \"grade\": \"B\",\n    \"score\": 70,\n    \"result\": \"Pass\",\n    \"assessmentDate\": \"2026-12-21\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "assessments",
+                    "{{assessmentReferenceNumber}}"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assessment\": {\n    \"grade\": \"B\",\n    \"score\": 70,\n    \"result\": \"Pass\",\n    \"assessmentDate\": \"2026-12-21\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {\n      \"assessment\": {\n        \"referenceNumber\": \"ASM-1912-432432\"\n      }\n    },\n    \"meta\": {\n      \"createdOn\": \"2020-07-21T17:32:28Z\",\n      \"updatedOn\": \"2020-07-21T17:32:28Z\"\n    },\n    \"status\": \"200\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Assessment reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.assessment?.referenceNumber).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Void assessment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}/void",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "assessments",
+                "{{assessmentReferenceNumber}}",
+                "void"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production."
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/assessments/{{assessmentReferenceNumber}}/void",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "assessments",
+                    "{{assessmentReferenceNumber}}",
+                    "void"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {\n      \"assessment\": {\n        \"referenceNumber\": \"ASM-1912-432432\"\n      }\n    },\n    \"meta\": {\n      \"createdOn\": \"2020-07-21T17:32:28Z\",\n      \"updatedOn\": \"2020-07-21T17:32:28Z\"\n    },\n    \"status\": \"200\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Assessment reference number is returned', () => {",
+                  "    pm.expect(ssg?.data?.assessment?.referenceNumber).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Grants",
+      "item": [
+        {
+          "name": "Grant calculator (baseline)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/grants/calculator",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "grants",
+                "calculator"
+              ]
+            },
+            "description": "SSG currently answers \"Access to this API has been disallowed\": a ticket with SSG is needed.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": {\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"startDate\": \"2026-12-20\",\n    \"fee\": 1000\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "403 Access disallowed (production today)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/grants/calculator",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "grants",
+                    "calculator"
+                  ]
+                },
+                "description": "SSG currently answers \"Access to this API has been disallowed\": a ticket with SSG is needed.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"startDate\": \"2026-12-20\",\n    \"fee\": 1000\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG calculateBaselineGrant failed with HTTP 403\",\n  \"api\": \"calculateBaselineGrant\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            },
+            {
+              "name": "400 Missing course reference",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/grants/calculator",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "grants",
+                    "calculator"
+                  ]
+                },
+                "description": "SSG currently answers \"Access to this API has been disallowed\": a ticket with SSG is needed.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"startDate\": \"2026-12-20\",\n    \"fee\": 1000\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): course.referenceNumber\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Grant calculator (personalised)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/grants/calculator/personalised",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "grants",
+                "calculator",
+                "personalised"
+              ]
+            },
+            "description": "Subscription still Pending on the SSG portal.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": {\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"startDate\": \"2026-12-20\",\n    \"fee\": 1000\n  },\n  \"trainee\": {\n    \"id\": \"{{nric}}\",\n    \"idType\": \"NRIC\",\n    \"dateOfBirth\": \"1990-01-31\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "403 Access disallowed (production today)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/grants/calculator/personalised",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "grants",
+                    "calculator",
+                    "personalised"
+                  ]
+                },
+                "description": "Subscription still Pending on the SSG portal.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course\": {\n    \"referenceNumber\": \"{{courseReferenceNumber}}\",\n    \"startDate\": \"2026-12-20\",\n    \"fee\": 1000\n  },\n  \"trainee\": {\n    \"id\": \"{{nric}}\",\n    \"idType\": \"NRIC\",\n    \"dateOfBirth\": \"1990-01-31\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG calculatePersonalisedGrant failed with HTTP 403\",\n  \"api\": \"calculatePersonalisedGrant\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search grants",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/grants/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "grants",
+                "search"
+              ]
+            },
+            "description": "Needs the Grants subscription on the SSG portal.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"grants\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "403 Not subscribed (production today)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/grants/search",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "grants",
+                    "search"
+                  ]
+                },
+                "description": "Needs the Grants subscription on the SSG portal.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"lastUpdateDateFrom\": \"2026-01-01\",\n    \"lastUpdateDateTo\": \"2026-12-31\"\n  },\n  \"sortBy\": {\n    \"field\": \"updatedOn\",\n    \"order\": \"asc\"\n  },\n  \"grants\": {\n    \"course\": {\n      \"run\": {\n        \"id\": \"{{runId}}\"\n      },\n      \"referenceNumber\": \"{{courseReferenceNumber}}\"\n    }\n  },\n  \"parameters\": {\n    \"page\": 0,\n    \"pageSize\": 20\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG searchGrants failed with HTTP 403\",\n  \"api\": \"searchGrants\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "View grant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/grants/{{grantReferenceNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "grants",
+                "{{grantReferenceNumber}}"
+              ]
+            },
+            "description": "Needs the Grants subscription on the SSG portal."
+          },
+          "response": [
+            {
+              "name": "403 Not subscribed (production today)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/grants/{{grantReferenceNumber}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "grants",
+                    "{{grantReferenceNumber}}"
+                  ]
+                },
+                "description": "Needs the Grants subscription on the SSG portal."
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG viewGrant failed with HTTP 403\",\n  \"api\": \"viewGrant\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SkillsFuture Credit Claims",
+      "description": "View Claim Details is Pending on the SSG portal. The other claim APIs are not subscribed yet.",
+      "item": [
+        {
+          "name": "1. Encrypt claim request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/sfc-claims/encrypt",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "sfc-claims",
+                "encrypt"
+              ]
+            },
+            "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimRequest\": {\n    \"course\": {\n      \"id\": \"{{courseReferenceNumber}}\",\n      \"title\": \"Course Title\",\n      \"runId\": \"{{runId}}\",\n      \"startDate\": \"2026-12-20\",\n      \"fee\": \"1000.00\"\n    },\n    \"individual\": {\n      \"nric\": \"{{nric}}\",\n      \"email\": \"trainee@example.com\",\n      \"mobileNumber\": \"91234567\"\n    },\n    \"additionalInformation\": \"\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/encrypt",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "encrypt"
+                  ]
+                },
+                "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"claimRequest\": {\n    \"course\": {\n      \"id\": \"{{courseReferenceNumber}}\",\n      \"title\": \"Course Title\",\n      \"runId\": \"{{runId}}\",\n      \"startDate\": \"2026-12-20\",\n      \"fee\": \"1000.00\"\n    },\n    \"individual\": {\n      \"nric\": \"{{nric}}\",\n      \"email\": \"trainee@example.com\",\n      \"mobileNumber\": \"91234567\"\n    },\n    \"additionalInformation\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"claimRequest\": \"YHasoZHKKQ2mXI4KFK7YVENI6JjkEdYc1Nk7mvZwP2UaObqNcq904ydgdLU6jC/p2Ex989otwXUPrgQsF98UyjRLkLd+GjAcwhvS5le6TKX2cHja8lZyVH8KvbcVs/a6UOBTlZ3t2i2rB70xJzEtbtPT5d42j1NblpQe5gfHJ/9vVLPh3GNSvqd+gREXTvGsK2HncH//JRZqLSkV/NaOOmIgrY0e1B8Iz1+tiBs+XZ73/WmlDU4jSixFy8R6t8RZdPwxePstQ45hY/CQZgjdvANoPbPcsB0dX60/qZLA8F87xBeMsIn4AaqfKoAo7/gq9Obf14rH8LY/oP7LwjWGow==\"\n    },\n    \"error\": {}\n  }\n}"
+            },
+            {
+              "name": "403 Not subscribed (production today)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/encrypt",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "encrypt"
+                  ]
+                },
+                "description": "Sample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"claimRequest\": {\n    \"course\": {\n      \"id\": \"{{courseReferenceNumber}}\",\n      \"title\": \"Course Title\",\n      \"runId\": \"{{runId}}\",\n      \"startDate\": \"2026-12-20\",\n      \"fee\": \"1000.00\"\n    },\n    \"individual\": {\n      \"nric\": \"{{nric}}\",\n      \"email\": \"trainee@example.com\",\n      \"mobileNumber\": \"91234567\"\n    },\n    \"additionalInformation\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"SSG encryptSfcClaimRequest failed with HTTP 403\",\n  \"api\": \"encryptSfcClaimRequest\",\n  \"ssgResponse\": {\n    \"error\": \"Access to this API has been disallowed\"\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Encrypted claim request is returned', () => {",
+                  "    pm.expect(ssg?.data?.claimRequest).to.be.a('string').and.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Decrypt claim response",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/sfc-claims/decrypt",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "sfc-claims",
+                "decrypt"
+              ]
+            },
+            "description": "Send the encrypted value MySkillsFuture posts back to your redirect URL.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimRequestStatus\": \"<encrypted value from the portal redirect>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/decrypt",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "decrypt"
+                  ]
+                },
+                "description": "Send the encrypted value MySkillsFuture posts back to your redirect URL.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"claimRequestStatus\": \"<encrypted value from the portal redirect>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"claimRequestStatus\": {\n        \"transactionStatus\": \"X\",\n        \"individual\": {\n          \"nric\": \"S1234567A\"\n        }\n      },\n      \"course\": {\n        \"id\": \"STMI-CS-CSXY\",\n        \"runId\": \"C123\",\n        \"startDate\": \"2019-05-22\"\n      },\n      \"claim\": {\n        \"id\": \"2000217512\",\n        \"amount\": \"1.00\",\n        \"submissionDate\": \"2019-09-13\"\n      },\n      \"additionalInformation\": \"This is additional information\"\n    },\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Claim status is returned', () => {",
+                  "    pm.expect(ssg?.data?.claimRequestStatus).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "View claim",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}?nric={{nric}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "sfc-claims",
+                "{{claimId}}"
+              ],
+              "query": [
+                {
+                  "key": "nric",
+                  "value": "{{nric}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}?nric={{nric}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "{{claimId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nric",
+                      "value": "{{nric}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": {\n      \"attachments\": [\n        {\n          \"fileName\": \"File001\",\n          \"fileSize\": \"8KB\",\n          \"fileType\": \"png\",\n          \"attachmentId\": \"attachment001\",\n          \"attachmentByte\": \"iVBokkSFhsyeee76GGJ\"\n        }\n      ],\n      \"claim\": {\n        \"amount\": \"1.0\",\n        \"submissionDate\": \"2019-09-09\",\n        \"status\": \"Cancelled\"\n      },\n      \"course\": {\n        \"startDate\": \"2019-09-10\",\n        \"title\": \"Cyber Security Risk Management\",\n        \"totalFeePaid\": \"1.0\"\n      },\n      \"trainingProvider\": {\n        \"name\": \"NATIONAL UNIVERSITY OF SINGAPORE\",\n        \"uen\": \"200604347R\"\n      },\n      \"attachmentUploadStatus\": \"success\"\n    },\n    \"error\": {},\n    \"status\": 200\n  }\n}"
+            },
+            {
+              "name": "400 Missing nric",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}?nric={{nric}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "{{claimId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nric",
+                      "value": "{{nric}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing required field(s): nric\",\n  \"ssgResponse\": null\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Claim data is returned', () => {",
+                  "    pm.expect(ssg?.data).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Cancel claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "sfc-claims",
+                "{{claimId}}",
+                "cancel"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nric\": \"{{nric}}\",\n  \"claimCancelCode\": \"<code from SSG cancellation code list>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "{{claimId}}",
+                    "cancel"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nric\": \"{{nric}}\",\n  \"claimCancelCode\": \"<code from SSG cancellation code list>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"claim\": {\n        \"status\": \"Cancelled\",\n        \"amount\": \"1.00\",\n        \"cancellationDate\": \"2019-09-09\"\n      },\n      \"error\": {}\n    }\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Claim is cancelled', () => {",
+                  "    pm.expect(ssg?.data?.claim?.status).to.equal('Cancelled');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "⚠ Upload supporting documents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ssg",
+                "sfc-claims",
+                "{{claimId}}",
+                "documents"
+              ]
+            },
+            "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nric\": \"{{nric}}\",\n  \"attachments\": [\n    {\n      \"fileName\": \"invoice.pdf\",\n      \"fileSize\": \"0.1 MB\",\n      \"fileType\": \"pdf\",\n      \"attachmentByte\": \"<file content as Base64>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (SSG sandbox sample data)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ssg/sfc-claims/{{claimId}}/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ssg",
+                    "sfc-claims",
+                    "{{claimId}}",
+                    "documents"
+                  ]
+                },
+                "description": "⚠ Changes live data on SSG when the gateway points to production.\n\nSample body: check the fields against the SSG Developer Portal docs for this API.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nric\": \"{{nric}}\",\n  \"attachments\": [\n    {\n      \"fileName\": \"invoice.pdf\",\n      \"fileSize\": \"0.1 MB\",\n      \"fileType\": \"pdf\",\n      \"attachmentByte\": \"<file content as Base64>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": 200,\n    \"data\": {\n      \"uploadStatus\": \"Success\",\n      \"claim\": {\n        \"id\": 2000217252,\n        \"submissionDate\": \"2019-02-02\",\n        \"amount\": \"10.00\"\n      }\n    },\n    \"error\": {}\n  }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Gateway reports success', () => pm.expect(body.success).to.equal(true));",
+                  "",
+                  "// SSG wraps its answer in { status, data }. Status can be a number or a string.",
+                  "const ssg = body.data || {};",
+                  "pm.test('SSG reports status 200', () => pm.expect(Number(ssg.status)).to.equal(200));",
+                  "",
+                  "pm.test('Upload succeeded', () => {",
+                  "    pm.expect(ssg?.data?.uploadStatus).to.equal('Success');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Safety guard: requests marked ⚠ change data on SSG.",
+          "// They only run when the variable allowWrites is set to \"true\".",
+          "if (pm.info.requestName.startsWith('⚠') && pm.variables.get('allowWrites') !== 'true') {",
+          "    console.log(`Skipped \"${pm.info.requestName}\": set allowWrites=true to run requests that change SSG data.`);",
+          "    pm.execution.skipRequest();",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Checks that apply to every gateway response",
+          "pm.test('Response is JSON', () => {",
+          "    pm.response.to.be.json;",
+          "});",
+          "",
+          "pm.test('Response time is under 30 seconds', () => {",
+          "    pm.expect(pm.response.responseTime).to.be.below(30000);",
+          "});",
+          "",
+          "if (pm.info.requestName !== 'Health check') {",
+          "    const body = pm.response.json();",
+          "",
+          "    pm.test('Body has a success flag', () => {",
+          "        pm.expect(body).to.have.property('success').that.is.a('boolean');",
+          "    });",
+          "",
+          "    if (body.success === false) {",
+          "        pm.test('Error response explains what went wrong', () => {",
+          "        pm.expect(body.message).to.be.a('string').and.not.be.empty;",
+          "        });",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+.env
+node_modules
+*.log
+# SSG certificates and private keys
+certs/
+certsnew/
+*.pem
