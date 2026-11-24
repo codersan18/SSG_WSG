@@ -184,7 +184,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+              "raw": "{{baseUrl}}/api/ssg/courses?keyword=safety&summary=true&page=0&pageSize=20",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -196,7 +196,7 @@
               "query": [
                 {
                   "key": "keyword",
-                  "value": "MindForce",
+                  "value": "safety",
                   "description": "Required. A word from the course title, or your company name to list your own courses"
                 },
                 {
@@ -214,7 +214,7 @@
                 }
               ]
             },
-            "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+            "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2023018648). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
           },
           "response": [
             {
@@ -223,7 +223,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=safety&summary=true&page=0&pageSize=20",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -235,7 +235,7 @@
                   "query": [
                     {
                       "key": "keyword",
-                      "value": "MindForce",
+                      "value": "safety",
                       "description": "Required. A word from the course title, or your company name to list your own courses"
                     },
                     {
@@ -253,7 +253,7 @@
                     }
                   ]
                 },
-                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2023018648). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
               },
               "status": "OK",
               "code": 200,
@@ -265,7 +265,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"total\": 11,\n    \"courses\": [\n      {\n        \"referenceNumber\": \"TGS-2020505817\",\n        \"title\": \"Classroom Management (WSQ) (Classroom & Asynchronous)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      },\n      {\n        \"referenceNumber\": \"TGS-2020504078\",\n        \"title\": \"Early Intervention: Fundamentals and Principles (WSQ)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      },\n      {\n        \"referenceNumber\": \"TGS-2020505813\",\n        \"title\": \"Family and Caregiver Engagement (WSQ) (Classroom & Asynchronous)\",\n        \"trainingProvider\": \"MINDFORCE ACADEMY PTE. LIMITED\"\n      }\n    ]\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"total\": 3216,\n    \"courses\": [\n      {\n        \"referenceNumber\": \"TGS-2023018648\",\n        \"title\": \"Specialist Diploma in Workplace Safety and Health\",\n        \"trainingProvider\": \"SISO ACADEMY PTE. LTD.\",\n        \"totalCostOfTrainingPerTrainee\": 5775,\n        \"totalTrainingDurationHour\": 231\n      },\n      {\n        \"referenceNumber\": \"TGS-2025052435\",\n        \"title\": \"Introduction to Workplace Safety and Health (WSH) (Design for Safety) Regulation\",\n        \"trainingProvider\": \"SINGAPORE POLYTECHNIC\",\n        \"totalCostOfTrainingPerTrainee\": 300,\n        \"totalTrainingDurationHour\": 8\n      },\n      {\n        \"referenceNumber\": \"TGS-2020503360\",\n        \"title\": \"Manage Workplace Safety and Health in Construction Sites\",\n        \"trainingProvider\": \"GREENSAFE INTERNATIONAL PTE. LTD.\",\n        \"totalCostOfTrainingPerTrainee\": 340,\n        \"totalTrainingDurationHour\": 34\n      }\n    ]\n  }\n}"
             },
             {
               "name": "200 No match (empty list)",
@@ -273,7 +273,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=safety&summary=true&page=0&pageSize=20",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -285,7 +285,7 @@
                   "query": [
                     {
                       "key": "keyword",
-                      "value": "MindForce",
+                      "value": "safety",
                       "description": "Required. A word from the course title, or your company name to list your own courses"
                     },
                     {
@@ -303,7 +303,7 @@
                     }
                   ]
                 },
-                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2023018648). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
               },
               "status": "OK",
               "code": 200,
@@ -323,7 +323,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=MindForce&summary=true&page=0&pageSize=20",
+                  "raw": "{{baseUrl}}/api/ssg/courses?keyword=safety&summary=true&page=0&pageSize=20",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -335,7 +335,7 @@
                   "query": [
                     {
                       "key": "keyword",
-                      "value": "MindForce",
+                      "value": "safety",
                       "description": "Required. A word from the course title, or your company name to list your own courses"
                     },
                     {
@@ -353,7 +353,7 @@
                     }
                   ]
                 },
-                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2020505817). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
+                "description": "Finds courses on MySkillsFuture by keyword, to get a course reference number (e.g. TGS-2023018648). SSG has no UEN filter here: search your company name to list your own courses. No match returns an empty list."
               },
               "status": "Bad Request",
               "code": 400,

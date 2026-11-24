@@ -7,7 +7,7 @@ const { trainingPartner } = require('../../config/env');
 
 /**
  * Searches all courses on MySkillsFuture by keyword (a word from the title, or the provider's name).
- * Use it to find a course's reference number (e.g. "TGS-2020505817").
+ * Use it to find a course's reference number (e.g. "TGS-2023018648").
  *
  * SSG ignores a UEN filter here, so search by your company name to find your own courses.
  * Optional query: page, pageSize.

@@ -93,9 +93,9 @@ describe('Response format', () => {
         status: 200,
         data: {
           courses: [{
-            referenceNumber: 'TGS-2020505817',
-            title: 'Classroom Management (WSQ)',
-            trainingProviderAlias: 'MINDFORCE ACADEMY PTE. LIMITED',
+            referenceNumber: 'TGS-0000000001',
+            title: 'Example Safety Course',
+            trainingProviderAlias: 'EXAMPLE TRAINING PTE. LTD.',
             totalCostOfTrainingPerTrainee: 1000,
             totalTrainingDurationHour: 16,
             description: 'long text that summary leaves out',
@@ -105,14 +105,14 @@ describe('Response format', () => {
       }),
     });
 
-    const res = await call('GET', '/api/ssg/courses?keyword=MindForce&summary=true');
+    const res = await call('GET', '/api/ssg/courses?keyword=safety&summary=true');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body.data, {
       total: 11,
       courses: [{
-        referenceNumber: 'TGS-2020505817',
-        title: 'Classroom Management (WSQ)',
-        trainingProvider: 'MINDFORCE ACADEMY PTE. LIMITED',
+        referenceNumber: 'TGS-0000000001',
+        title: 'Example Safety Course',
+        trainingProvider: 'EXAMPLE TRAINING PTE. LTD.',
         totalCostOfTrainingPerTrainee: 1000,
         totalTrainingDurationHour: 16,
       }],

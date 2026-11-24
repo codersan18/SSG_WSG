@@ -24,11 +24,11 @@ beforeEach(() => fakeSsg.reset());
 
 describe('Courses and course runs', () => {
   test('searchCourses sends the keyword and paging, version v3.0', async () => {
-    await course.searchCourses('MindForce', { page: 0, pageSize: 20 });
+    await course.searchCourses('safety', { page: 0, pageSize: 20 });
     assert.equal(sent().method, 'GET');
     assert.equal(sent().url, '/courses/directory');
     assert.equal(sent().headers['x-api-version'], 'v3.0');
-    assert.deepEqual(sent().query, { page: 0, pageSize: 20, keyword: 'MindForce' });
+    assert.deepEqual(sent().query, { page: 0, pageSize: 20, keyword: 'safety' });
   });
 
   test('searchCourses turns SSG\'s "404 Not Found" (no match) into an empty list', async () => {
